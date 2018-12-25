@@ -96,7 +96,7 @@
 </script>
 <script>
     $(function () {
-        var url = "http://localhost:6655/Product/MedicinesList?medicine=";
+        var url = "@(Url.Action("MedicinesList", "Product", null , Context.Request.Scheme))" + "?medicine="
         $("#medicineSelector").autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -117,7 +117,6 @@
                 var medicine = $("#Medicine");
                 var medicineSelector = $("#medicineSelector");
                 if (medicine != null) {
-                    console.log(ui.item);
                     medicine.val(ui.item.value);
                     window.setTimeout(function () {
                         medicineSelector.val(ui.item.label);

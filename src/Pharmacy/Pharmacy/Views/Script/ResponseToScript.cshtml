@@ -72,6 +72,7 @@
 
         function addMed(medId) {
             var scriptList = $("#scriptList");
+            var url = "@(Url.Action("DoctorList", "Doctor", null , Context.Request.Scheme))" + "?doctor="
             var urlMedInfo = "http://localhost:6655/Medicine/FindMedicine/" + medId;
             var item = $.getJSON(urlMedInfo, function (json) {
                 var res = item.responseJSON;
@@ -90,7 +91,7 @@
 
         }
 
-        var url = "http://localhost:6655/Product/MedicinesList?medicine=";
+        var url = "@(Url.Action("MedicinesList", "Product", null , Context.Request.Scheme))" + "?medicine="
         $("#medicineSelector").autocomplete({
             source: function (request, response) {
                 $.ajax({

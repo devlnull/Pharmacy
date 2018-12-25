@@ -8,7 +8,7 @@
     <div class="col-md-12">
         <div class="panel">
             <a class="btn btn-sm btn-primary" asp-controller="InsuranceSupport" asp-action="Index" asp-route-id="@Model.Insurance">
-               <i class="fa fa-arrow-circle-left"></i> Back to Supported Medicine
+                <i class="fa fa-arrow-circle-left"></i> Back to Supported Medicine
             </a>
         </div>
     </div>
@@ -39,7 +39,7 @@
 <script>
     $(function () {
         var medId = @Model.Insurance;
-        var url = "http://localhost:6655/InsuranceSupport/MedicinesList?id=" + medId + "&medicine=";
+        var url = "@(Url.Action("MedicinesList", "InsuranceSupport", null , Context.Request.Scheme))" + "?id=" + medId + "&medicine="
         $("#medicineSelector").autocomplete({
             source: function (request, response) {
                 $.ajax({

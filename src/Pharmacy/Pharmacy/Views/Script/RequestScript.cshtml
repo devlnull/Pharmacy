@@ -36,7 +36,8 @@
 
 <script>
     $(function () {
-        var url = "http://localhost:6655/Doctor/DoctorList?doctor=";
+        var url = "@(Url.Action("DoctorList", "Doctor", null , Context.Request.Scheme))" + "?doctor="
+
         $("#doctorSelector").autocomplete({
             source: function (request, response) {
                 $.ajax({
