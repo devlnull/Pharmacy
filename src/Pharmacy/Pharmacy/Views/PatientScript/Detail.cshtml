@@ -1,0 +1,45 @@
+﻿@model Pharmacy.Data.Entities.Script
+@{
+    ViewData["Title"] = "Responded script";
+    var alreadyOrdered = ViewData["AlreadyOrdered"] == null ? false : (bool)ViewData["AlreadyOrdered"];
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">@Model.Doctor.Firstname @Model.Doctor.Lastname response</h3>
+    </div>
+    <div class="panel-body">
+        <h4>
+            @Model.Response
+        </h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-9 col-md-offset-2">
+        <span style="font-size:larger">Script for you</span> 
+        @if (!alreadyOrdered)
+        { 
+            <a class="btn btn-primary pull-right" asp-controller="Order" asp-action="NewOrder" asp-route-id="@Model.Id"><i class="fa fa-shopping-cart"></i> Order this script</a>
+        }
+        else
+        {
+            <label class="label label-default pull-right">Already Ordered</label>
+        }
+
+        <hr />
+        <div class="col-md-12" id="scriptList">
+            @if (Model.ScriptDetails.Any())
+            {
+                foreach (var item in Model.ScriptDetails)
+                {
+                    <div class="well">
+                        <h4>@item.Medicine.Name - @item.Medicine.Dosage</h4>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

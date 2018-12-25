@@ -1,0 +1,152 @@
+﻿@model Pharmacy.Models.Scripts.RespondToScriptModel
+@{
+    ViewData["Title"] = "Response to patient";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">@Model.PatientName Request text</h3>
+    </div>
+    <div class="panel-body">
+        <h4>
+            @Model.Request
+        </h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-9 col-md-offset-2">
+        <form method="post" id="submitForm">
+            <h4>Response to @Model.PatientName</h4>
+            <hr />
+            <input asp-for="Medicines" type="hidden"/>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <label asp-for="Response"></label>
+                </div>
+                <div class="col-md-8">
+                    <input asp-for="Response" class="form-control" />
+                    <span asp-validation-for="Response" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <label for="medicineName">Script for patient</label>
+                </div>
+                <div class="col-md-8">
+                    <input type="text" class="form-control text-center" id="medicineSelector" name="medicineSelector" placeholder="type medicine name..." />
+                    <div style="margin:15px 0px">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Script detail
+                            </div>
+                            <div class="panel-body" id="scriptList">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary pull-right">Submit Script</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var medicineList = [];
+
+        function delMed(delItem) {
+            var medId = $(delItem).data("id");
+            if (medId != undefined) {
+                var index = medicineList.indexOf(medId);
+                if (index > -1) {
+                    medicineList.splice(index, 1);
+                }
+                var delItemParent = delItem.parentNode;
+                delItemParent.remove();
+            }
+        }
+
+        function addMed(medId) {
+            var scriptList = $("#scriptList");
+            var urlMedInfo = "http://localhost:6655/Medicine/FindMedicine/" + medId;
+            var item = $.getJSON(urlMedInfo, function (json) {
+                var res = item.responseJSON;
+                if (res != null || res != undefined) {
+                    scriptList.append("<div class='row' style='margin:10px 0px;padding:5px; border-radius:4px;background-color:#bce8f1;' id='med"
+                        + medId + "'>" +
+                        "<span style='font-size:large'>" + res.name + " - " + res.dosage + "</span>" +
+                        "<a id='delMed" + medId + "' class='btn btn-danger pull-right' data-id='" + medId + "'> Delete </a>" +
+                        "</div>");
+                }
+                var delItem = $('#delMed' + medId);
+                delItem.on('click', function () {
+                    delMed(delItem[0]);
+                });
+            });
+
+        }
+
+        var url = "http://localhost:6655/Product/MedicinesList?medicine=";
+        $("#medicineSelector").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: url + $("#medicineSelector").val(),
+                    dataType: "json",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.name,
+                                value: item.id
+                            };
+                        }))
+                    }
+                });
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                var medicines = $("#Medicines");
+                var medicineSelector = $("#medicineSelector");
+                var medVal = ui.item.value;
+                medicineList.push(medVal);
+                addMed(medVal);
+                window.setTimeout(function () {
+                    medicineSelector.val("");
+                }, 10);
+            },
+            open: function () {
+                $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+            },
+            close: function () {
+                $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+            }
+        });
+
+        $('#submitForm').submit(function () {
+            debugger;
+            var medicines = $("#Medicines");
+            console.log(medicines);
+            medicines.val("");
+            console.log(medicineList.length);
+            if (medicines != undefined) {
+                for (var i = 0; i < medicineList.length; i++) {
+                    if (i == 0) {
+                        medicines.val(medicineList[i]);
+                    }
+                    else {
+                        medicines.val(medicines.val() + ',' + medicineList[i]);
+                    }
+                }
+            }
+        });
+    });
+
+
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

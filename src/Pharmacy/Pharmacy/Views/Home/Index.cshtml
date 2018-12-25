@@ -1,0 +1,190 @@
+﻿@model Pharmacy.Models.HomeModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@if (Model.Active != null)
+{
+    if (!Model.Active.Value)
+    {
+        <div class="alert alert-warning">
+            <h4>
+                You're account is not active, admin might disabled you're account or not activate yet!
+            </h4>
+        </div>
+    }
+}
+
+@if (User.IsInRole(Pharmacy.Data.PharmacyRoles.Admin))
+{
+    <div class="row" style="margin:10px 0px">
+        <div class="col-md-12">
+            <div class="col-md-3">
+                <button class="btn btn-primary btn-lg" style="padding:30px;width:275px">
+                    <i class="fa fa-user-secret fa-2x"></i> Admins <span class="badge">@Model.AdminCount</span>
+                </button>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-info btn-lg" style="padding:30px;width:275px">
+                    <i class="fa fa-users fa-2x"></i>  Employees <span class="badge">@Model.EmployeeCount</span>
+                </button>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-warning btn-lg" style="padding:30px;width:275px">
+                    <i class="fa fa-user-md fa-2x"></i> Doctors <span class="badge">@Model.DoctorCount</span>
+                </button>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-success btn-lg" style="padding:30px;width:275px">
+                    <i class="fa fa-user-injured fa-2x"></i>  Patients <span class="badge">@Model.PatientCount</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary" style="margin:10px 0px">
+        <div class="panel-heading">
+            <h3 class="panel-title">Admin Dashboard</h3>
+        </div>
+        <div class="panel-body">
+            <a class="btn btn-lg btn-default" asp-controller="Admin" asp-action="NewAdmin">Add new admin <i class="fa fa-user-secret"></i></a>
+            <a class="btn btn-lg btn-default" asp-controller="Admin" asp-action="ListOfAttempts">List of attempted users <i class="fa fa-paper-plane"></i></a>
+            <a class="btn btn-lg btn-default" asp-controller="Doctor" asp-action="ListOfLicenses">List of doctor licenses <i class="fa fa-address-card"></i></a>
+        </div>
+    </div>
+}
+
+@if (User.IsInRole(Pharmacy.Data.PharmacyRoles.Employee))
+{
+    <div class="row" style="margin:10px 0px">
+        <div class="col-md-12">
+            <div class="col-md-3">
+                <a class="btn btn-primary btn-lg" style="padding:30px;width:275px" asp-controller="Medicine" asp-action="Index">
+                    <i class="fa fa-capsules fa-2x"></i> Medicines <span class="badge">@Model.MedicineCount</span>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-info btn-lg" style="padding:30px;width:275px" asp-controller="MedicineCategory" asp-action="Index">
+                    <i class="fa fa-tags fa-2x"></i>  Medicine Categories <span class="badge">@Model.MedicineCategoryCount</span>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-warning btn-lg" style="padding:30px;width:275px" asp-controller="Insurance" asp-action="Index">
+                    <i class="fa fa-shield-alt fa-2x"></i> Insurances <span class="badge">@Model.InsuranceCount</span>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-success btn-lg" style="padding:30px;width:275px" asp-controller="Product" asp-action="Index">
+                    <i class="fa fa-pills fa-2x"></i>  Products <span class="badge">@Model.ProductCount</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin:10px 0px">
+        <div class="col-md-12">
+            <div class="col-md-3">
+                <a class="btn btn-primary btn-lg" style="padding:30px;width:275px" asp-controller="Employee" asp-action="OrderList">
+                    <i class="fa fa-shopping-cart fa-2x"></i> Orders <span class="badge">@Model.OrderCount</span>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-info btn-lg" style="padding:30px;width:275px" asp-controller="Employee" asp-action="ScriptList">
+                    <i class="fa fa-medkit fa-2x"></i>  Scripts <span class="badge">@Model.ScriptCount</span>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-warning btn-lg" style="padding:30px;width:275px" asp-controller="Doctor" asp-action="ListOfLicenses">
+                    <i class="fa fa-address-card fa-2x"></i> Doctor Licenses <span class="badge">@Model.DoctorLicenses</span>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-success btn-lg" style="padding:30px;width:275px" asp-controller="Company" asp-action="Index">
+                    <i class="fa fa-building fa-2x"></i>  Companies <span class="badge">@Model.CompanyCount</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-primary" style="margin-top:50px">
+        <div class="panel-heading">
+            <h3 class="panel-title">Employee Dashboard</h3>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-12">
+                <a class="btn btn-lg btn-default" style="margin:2px" asp-controller="Medicine" asp-action="Add">Add new medicine <i class="fa fa-pills"></i></a>
+                <a class="btn btn-lg btn-default" style="margin:2px" asp-controller="MedicineCategory" asp-action="Add">Add new medicine category <i class="fa fa-tags"></i></a>
+                <a class="btn btn-lg btn-default" style="margin:2px" asp-controller="Insurance" asp-action="Add">Add new insurance <i class="fa fa-shield-alt"></i></a>
+                <a class="btn btn-lg btn-default" style="margin:2px" asp-controller="Company" asp-action="Index">Add new company <i class="fa fa-building"></i></a>
+                <a class="btn btn-lg btn-default" style="margin:2px" asp-controller="#" asp-action="#">Reports <i class="fa fa-chart-bar"></i></a>
+            </div>
+        </div>
+    </div>
+}
+
+@if (User.IsInRole(Pharmacy.Data.PharmacyRoles.Doctor))
+{
+    <div class="row" style="margin:10px 0px">
+        <div class="col-md-12">
+            <div class="col-md-4 col-md-offset-2">
+                <a class="btn btn-primary btn-lg" style="padding:30px;width:275px" asp-controller="Script" asp-action="Index">
+                    <i class="fa fa-capsules fa-2x"></i> Scripts <span class="badge">@Model.CurrentDoctorScripts</span>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a class="btn btn-info btn-lg" style="padding:30px;width:275px" asp-controller="DoctorLicense" asp-action="Index">
+                    <i class="fa fa-tags fa-2x"></i>  Licenses <span class="badge">@Model.CurrentDoctorLicenses</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Doctor Dashboard</h3>
+        </div>
+        <div class="panel-body">
+            <a class="btn btn-lg btn-default" asp-controller="DoctorLicense" asp-action="NewLicense">New License <i class="fa fa-user-circle"></i></a>
+        </div>
+    </div>
+}
+
+@if (User.IsInRole(Pharmacy.Data.PharmacyRoles.Patient))
+{
+    <div class="row" style="margin:10px 0px">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <a class="btn btn-success btn-lg" asp-controller="PatientScript" asp-action="Index" style="padding:30px;width:275px">
+                    <i class="fa fa-capsules fa-2x"></i> Scripts <span class="badge">@Model.CurrentPatientScripts</span>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a class="btn btn-info btn-lg" style="padding:30px;width:275px" asp-controller="Order" asp-action="Index">
+                    <i class="fa fa-credit-card fa-2x"></i>  Orders <span class="badge">@Model.CurrentPatientOrders</span>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a class="btn btn-primary btn-lg" href="#" style="padding:30px;width:275px">
+                    <i class="fa fa-shopping-basket fa-2x"></i> Basket <span class="badge">@Model.CurrentPatientBasketItems</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Patient Dashboard</h3>
+        </div>
+        <div class="panel-body">
+            <a class="btn btn-lg btn-default" asp-controller="#" asp-action="#">Manage Profile <i class="fa fa-user-circle"></i></a>
+            <a class="btn btn-lg btn-default" asp-controller="Script" asp-action="RequestScript">Request new script <i class="fa fa-syringe"></i></a>
+            <a class="btn btn-lg btn-primary" asp-controller="Order" asp-action="Checkout">Checkout! <i class="fa fa-credit-card"></i></a>
+        </div>
+    </div>
+}
+
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <h2>If you are not already a part of this amazing Pharmacy system <a class="btn btn-default" style="text-transform: uppercase;" asp-area="Identity" asp-page="/Account/Register">let's Register</a></h2>
+        </div>
+    </div>
+}

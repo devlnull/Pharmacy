@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Pharmacy.Data.Entities.Script>
+
+@{
+    ViewBag.Title = "Scripts";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        Request
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Request</td>
+                            <td>@item.Status</td>
+                            <td>
+                                @if (item.Status == Pharmacy.Data.ScriptStatuses.Responded)
+                                {
+                                    <a class="btn btn-sm btn-primary" asp-controller="PatientScript" asp-action="Detail" asp-route-id="@item.Id">See the response</a>
+                                }
+                                else
+                                {
+
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6">No category already exist.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

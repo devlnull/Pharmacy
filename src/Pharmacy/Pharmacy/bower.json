@@ -1,0 +1,20 @@
+{
+  "name": "Pharmacy",
+  "authors": [
+    "Amirhossein <amirhosseinghorbani7@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "fontawesome": "5.6.1"
+  }
+}

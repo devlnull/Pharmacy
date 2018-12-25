@@ -1,0 +1,61 @@
+﻿@model List<Pharmacy.Models.Companies.CompanyModel>
+@{
+    ViewBag.Title = "Companies";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <a class="btn btn-success" asp-controller="Company" asp-action="Add">Add new company</a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Produtcts
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Products</td>
+                            <td>
+                                <a class="btn btn-sm btn-warning" asp-controller="Company" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <a class="btn btn-sm btn-danger" asp-controller="Company" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                <a class="btn btn-sm btn-primary" asp-controller="Product" asp-action="AddCompanyProduct" asp-route-id="@item.Id">Add new product</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6">No Company already exist.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

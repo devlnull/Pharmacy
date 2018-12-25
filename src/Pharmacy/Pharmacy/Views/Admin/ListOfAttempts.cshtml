@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Pharmacy.Models.Admin.AttemptedUser>
+@{
+    ViewBag.Title = "List of attempts";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @if (Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">New Attempt by a @item.Type</div>
+                    <div class="panel-body">
+                        <h4>Username : @item.Username</h4>
+                        <h4>I have registerd my information and need to be activate to use this system. Please accept my request.</h4>
+                        <a class="btn btn-success" asp-controller="Admin" asp-action="ActivateUser"
+                           asp-route-username="@item.Username" asp-route-type="@item.Type">Activate</a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">Attempts</div>
+                <div class="panel-body">
+                    <h4>No attempt already exist</h4>
+                </div>
+            </div>
+        }
+    </div>
+</div>

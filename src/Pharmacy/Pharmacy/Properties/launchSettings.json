@@ -1,0 +1,11 @@
+﻿{
+  "profiles": {
+    "Pharmacy": {
+      "commandName": "Project",
+      "applicationUrl": "http://0.0.0.0:6655",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+﻿@model Pharmacy.Models.InsuranceSupport.InsuranceSupportModel
+@{
+    ViewBag.Title = "Support new medicine for " + Model.InsuranceName;
+}
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <a class="btn btn-sm btn-primary" asp-controller="InsuranceSupport" asp-action="Index" asp-route-id="@Model.Insurance">
+               <i class="fa fa-arrow-circle-left"></i> Back to Supported Medicine
+            </a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-9 col-md-offset-2">
+        <form method="post">
+            <h4>Support new medicine</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input id="Insurance" type="hidden" name="Insurance" value="@Model.Insurance" />
+            <input id="Medicine" type="hidden" name="Medicine" />
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <label for="medicineSelector"></label>
+                    </div>
+                    <div class="col-md-8 ui-widget">
+                        <input type="text" name="medicineSelector" id="medicineSelector" class="form-control text-center" placeholder="Select a medicine..." />
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var medId = @Model.Insurance;
+        var url = "http://localhost:6655/InsuranceSupport/MedicinesList?id=" + medId + "&medicine=";
+        $("#medicineSelector").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: url + $("#medicineSelector").val(),
+                    dataType: "json",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.name,
+                                value: item.id
+                            };
+                        }))
+                    }
+                });
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                var medicine = $("#Medicine");
+                var medicineSelector = $("#medicineSelector");
+                if (medicine != null) {
+                    console.log(ui.item);
+                    medicine.val(ui.item.value);
+                    window.setTimeout(function () {
+                        medicineSelector.val(ui.item.label);
+                    }, 10);
+                }
+
+            },
+            open: function () {
+                $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+            },
+            close: function () {
+                $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+            }
+        });
+
+    });
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

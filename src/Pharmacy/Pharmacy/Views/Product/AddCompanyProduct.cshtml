@@ -1,0 +1,141 @@
+﻿@model Pharmacy.Models.Products.CompanyProductModel
+@{
+    ViewBag.Title = "Add new Product for " + ViewBag.CompanyName;
+}
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-9 col-md-offset-2">
+        <form method="post">
+            <h4>Create a medicine</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input id="Company" type="hidden" name="Company" value="@Model.Company"/>
+            <input id="Medicine" type="hidden" name="Medicine" />
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <label for="medicineSelector"></label>
+                    </div>
+                    <div class="col-md-8 ui-widget">
+                        <input type="text" name="medicineSelector" id="medicineSelector" class="form-control text-center" placeholder="Select a medicine..." />
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label asp-for="CreateDate"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="CreateDate" class="form-control text-center" />
+                        <span asp-validation-for="CreateDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label asp-for="ExpireDate"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="ExpireDate" class="form-control text-center" />
+                        <span asp-validation-for="ExpireDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label asp-for="Price"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="Price" class="form-control text-center" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label asp-for="Quantity"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="Quantity" class="form-control text-center" />
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <h4 id="totalPrice">Total Price : 0</h4>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        var price = $('#Price');
+        var qty = $('#Quantity');
+
+        function calTotal() {
+            if (price.val() !== null || qty.val() !== null) {
+                var totalPrice = $('#totalPrice');
+                var total = (price.val() != null ? price.val() : 1) * (qty.val() != null ? qty.val() : 1);
+                console.log(total);
+                document.getElementById("totalPrice").innerHTML = "Total Price : " + total + "$";
+            }
+        }
+
+        price.on('input', calTotal);
+        qty.on('input', calTotal);
+
+
+    });
+
+</script>
+<script>
+    $(function () {
+        var url = "http://localhost:6655/Product/MedicinesList?medicine=";
+        $("#medicineSelector").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: url + $("#medicineSelector").val(),
+                    dataType: "json",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.name,
+                                value: item.id
+                            };
+                        }))
+                    }
+                });
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                var medicine = $("#Medicine");
+                var medicineSelector = $("#medicineSelector");
+                if (medicine != null) {
+                    console.log(ui.item);
+                    medicine.val(ui.item.value);
+                    window.setTimeout(function () {
+                        medicineSelector.val(ui.item.label);
+                    }, 10);
+                }
+
+            },
+            open: function () {
+                $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+            },
+            close: function () {
+                $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+            }
+        });
+
+    });
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

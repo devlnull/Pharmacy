@@ -1,0 +1,30 @@
+﻿@model Pharmacy.Models.Companies.CompanyModel
+@{
+    ViewData["Title"] = "Edit company " + Model.Name;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-9 col-md-offset-2">
+        <form method="post">
+            <h4>Edit a company</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <label asp-for="Name"></label>
+                </div>
+                <div class="col-md-8">
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

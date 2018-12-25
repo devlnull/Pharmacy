@@ -1,0 +1,148 @@
+﻿@model Pharmacy.Models.Orders.OrderListModel
+@{
+    ViewBag.Title = "New Order";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Available Products</h3>
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Medicine Name</th>
+                            <th>Medicine Dosage</th>
+                            <th>Produced By</th>
+                            <th>Price</th>
+                            <th>Product expire data</th>
+                            <th>Insurance Status</th>
+                            <th>
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Products.Any())
+                        {
+                            foreach (var prd in Model.Products)
+                            {
+                                <tr id='@($"prd{prd.Id}")'>
+                                    <td>@prd.MedicineName</td>
+                                    <td>@prd.MedicineDosage</td>
+                                    <td>@prd.CompanyName</td>
+                                    <td>@prd.ProductPrice.ToString("C")</td>
+                                    <td>@prd.ProductExpireDate.ToShortDateString()</td>
+                                    @if (prd.SupportByInsurance)
+                                    {
+                                        <td>
+                                            <label class="label label-success">Supported by @prd.Insurance</label>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <label class="label label-default">NOT SUPPORTED</label>
+                                        </td>
+                                    }
+                                    <td>
+                                        <a class="btn btn-primary btn-sm" asp-controller="Order" asp-action="AddToBasket" asp-route-orderId="@Model.OrderId" asp-route-scriptId="@prd.ScriptId" asp-route-productId="@prd.Id">
+                                            <i class="fa fa-shopping-basket"></i> Add to Basket
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td style="text-align:center" colspan="6">
+                                    No Product exist.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr />
+        <div class="row" style="margin-top:50px;">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        Order details
+                    </div>
+                    <div class="panel-body">
+                        <h4 id="totalPrice">Total Price : </h4>
+                        <div class="col-md-12" id="orderList">
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Medicine Name</th>
+                                        <th>Medicine Dosage</th>
+                                        <th>Produced By</th>
+                                        <th>Price</th>
+                                        <th>Product expire data</th>
+                                        <th>Insurance Status</th>
+                                        <th>
+
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Basket.Any())
+                                    {
+                                        foreach (var prd in Model.Basket)
+                                        {
+                                    <tr id='@($"basket{prd.Id}")'>
+                                        <td>@prd.MedicineName</td>
+                                        <td>@prd.MedicineDosage</td>
+                                        <td>@prd.CompanyName</td>
+                                        <td>@prd.ProductPrice.ToString("C")</td>
+                                        <td>@prd.ProductExpireDate.ToShortDateString()</td>
+                                        @if (prd.SupportByInsurance)
+                                        {
+                                            <td>
+                                                <label class="label label-success">Supported by @prd.Insurance</label>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <label class="label label-default">NOT SUPPORTED</label>
+                                            </td>
+                                        }
+                                        <td>
+                                            <a class="btn btn-primary btn-sm" asp-controller="Order" asp-action="DeleteFromBasket" asp-route-orderDetailId="@prd.Id" asp-route-scriptId="@prd.ScriptId"><i class="fa fa-trash"></i> Remove</a>
+                                        </td>
+                                    </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td style="text-align:center" colspan="6">
+                                                Nothing exist in basket
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-12 center-block" style="margin-top:50px;">
+                            <a class="btn btn-default pull-left btn-lg" asp-controller="Home" asp-action="Index">
+                                <i class="fa fa-arrow-left"></i> Back to Main
+                            </a>
+                            <form method="post" asp-controller="Order" asp-action="Checkout">
+                                <button type="submit" class="btn btn-success pull-right btn-lg">
+                                    <i class="fa fa-credit-card"></i> Check out!
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

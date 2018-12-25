@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Pharmacy.Data.Entities.Script>
+@{
+    ViewBag.Title = "Doctor Scripts";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        Patient Name
+                    </th>
+                    <th>
+                        Patient Birth
+                    </th>
+                    <th>
+                        Summary of request
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Patient.Firstname @item.Patient.Lastname</td>
+                            <td>@item.Patient.Birthday.ToShortDateString()</td>
+                            <td>
+                                @(item.Request.Count() > 25 ? item.Request.Substring(0, 25) : item.Request) ...
+                            </td>
+                            <td>
+                                @if (item.Status == Pharmacy.Data.ScriptStatuses.Pending)
+                                {
+                                    <a class="btn btn-sm btn-success" asp-controller="Script" asp-action="ResponseToScript" asp-route-id="@item.Id">Response To Patient</a>
+                                }
+                                else
+                                {
+                                    <label class="label label-info">Answered and made a script for it</label>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6">No Script already exist.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

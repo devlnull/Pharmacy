@@ -1,0 +1,96 @@
+﻿@model List<Pharmacy.Models.Doctors.LicenseModel>
+@{
+    ViewBag.Title = "Doctor Licenses";
+    var containsQuery = Context.Request.Query.ContainsKey("Query");
+    var Queries = Context.Request.Query;
+    string strQuery = Queries["Query"].ToString();
+    string queryStr = containsQuery ? strQuery : string.Empty;
+    var containsOnlyExistence = Context.Request.Query.ContainsKey("OnlyExistence");
+    string onlyExistenceStr = Queries["OnlyExistence"].ToString();
+    string strOnlyExistence = containsOnlyExistence ? onlyExistenceStr : "False";
+    bool containLicenseStatus = Context.Request.Query.ContainsKey("DoctorLicenseStatus");
+    int licenseStatus = containLicenseStatus ? Convert.ToInt32(Queries["DoctorLicenseStatus"]) : 2;
+}
+
+<h2>@ViewData["Title"] (@Model.Count) items</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <form class="navbar-form navbar-right" role="search">
+                <div class="form-group" style="margin:4px 10px;">
+                    <label for="DoctorLicenseStatus">
+                        <select id="DoctorLicenseStatus" name="DoctorLicenseStatus" asp-items="Html.GetEnumSelectList<Pharmacy.Data.DoctorLicenseStatuses>()" class="form-control">
+                        </select>
+                    </label>
+                </div>
+                <div class="form-group" style="margin:4px 10px;">
+                    <input name="Query" id="Query" type="text" class="form-control" placeholder="Search" value="@queryStr">
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        Doctor Name
+                    </th>
+                    <th>
+                        License
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.DoctorName</td>
+                            <td>@item.Title</td>
+                            <td>
+                                @if (item.Status != Pharmacy.Data.DoctorLicenseStatuses.Accepted)
+                                {
+                                    <a class="btn btn-sm btn-success" asp-controller="Doctor" asp-action="AcceptLicense" asp-route-id="@item.Id">Accept</a>
+                                }
+                                @if (item.Status != Pharmacy.Data.DoctorLicenseStatuses.Rejected)
+                                {
+                                    <a class="btn btn-sm btn-danger" asp-controller="Doctor" asp-action="RejectLicense" asp-route-id="@item.Id">Reject</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6">No Medicine already exist.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var licIndex = @(containLicenseStatus ? licenseStatus : 2);
+        var selectControl = document.getElementById('DoctorLicenseStatus');
+        if (selectControl != null || selectControl != undefined) {
+            selectControl.value = licIndex;
+        }
+    });
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

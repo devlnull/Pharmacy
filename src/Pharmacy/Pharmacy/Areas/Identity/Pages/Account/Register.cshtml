@@ -1,0 +1,99 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-9 col-md-offset-2">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h4>Create a new account.</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <label asp-for="Input.Email"></label>
+                </div>
+                <div class="col-md-8">
+                    <input asp-for="Input.Email" class="form-control" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label asp-for="Input.Firstname"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="Input.Firstname" class="form-control" />
+                        <span asp-validation-for="Input.Firstname" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label asp-for="Input.Lastname"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="Input.Lastname" class="form-control" />
+                        <span asp-validation-for="Input.Lastname" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label asp-for="Input.Type"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <select class="form-control" asp-for="Input.Type" asp-items="Html.GetEnumSelectList<Pharmacy.Data.UserTypes>()"></select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label asp-for="Input.Birthday"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="Input.Birthday" class="form-control" />
+                        <span asp-validation-for="Input.Birthday" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label asp-for="Input.Password"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="Input.Password" class="form-control" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label asp-for="Input.ConfirmPassword"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="Input.ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label asp-for="Input.PhoneNumber"></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input asp-for="Input.PhoneNumber" class="form-control" />
+                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-default">Register</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

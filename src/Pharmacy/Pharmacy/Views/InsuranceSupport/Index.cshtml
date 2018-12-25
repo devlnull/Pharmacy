@@ -1,0 +1,68 @@
+﻿@model List<Pharmacy.Models.Medicines.MedicineModel>
+@{
+    ViewBag.Title = "Supported Medicines by " + ViewBag.Insurance;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <a class="btn btn-default" asp-controller="Insurance" asp-action="Index"><i class="fa fa-arrow-alt-circle-left"></i> Back to Insurances</a>
+            <a class="btn btn-success" asp-controller="InsuranceSupport" asp-action="SupportMedicine" asp-route-id="@ViewBag.InsuranceId">Support new medicine</a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Dosage
+                    </th>
+                    <th>
+                        Supported By Insurance
+                    </th>
+                    <th>
+                        Produced by companies
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Dosage</td>
+                            <td>@item.SupportedByInsurances</td>
+                            <td>@item.ProducedByCompanies</td>
+                            <td>
+                                <a class="btn btn-sm btn-danger" asp-controller="InsuranceSupport" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6">No Medicine already exist.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
