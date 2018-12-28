@@ -6,13 +6,13 @@ namespace Pharmacy.Data.Entities
     {
         public Patient()
         {
-            Insurances = new HashSet<Insurance>();
+            Insurances = new HashSet<PatientInsurance>();
         }
 
         public AppUser User { get; set; }
         public int UserId { get; set; }
 
-        public virtual ICollection<Insurance> Insurances { get; set; }
+        public virtual ICollection<PatientInsurance> Insurances { get; set; }
         public virtual ICollection<Script> Scripts { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
     }

@@ -10,8 +10,8 @@ using Pharmacy.Data;
 namespace Pharmacy.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20181225005219_OrderDetailStatus")]
-    partial class OrderDetailStatus
+    [Migration("20181228111032_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -317,11 +317,7 @@ namespace Pharmacy.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(64);
 
-                    b.Property<int?>("PatientId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PatientId");
 
                     b.ToTable("Insurances");
                 });
@@ -630,13 +626,6 @@ namespace Pharmacy.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Pharmacy.Data.Entities.Insurance", b =>
-                {
-                    b.HasOne("Pharmacy.Data.Entities.Patient")
-                        .WithMany("Insurances")
-                        .HasForeignKey("PatientId");
-                });
-
             modelBuilder.Entity("Pharmacy.Data.Entities.InsuranceSupport", b =>
                 {
                     b.HasOne("Pharmacy.Data.Entities.Insurance", "Insurance")
@@ -710,7 +699,7 @@ namespace Pharmacy.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Pharmacy.Data.Entities.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("Insurances")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

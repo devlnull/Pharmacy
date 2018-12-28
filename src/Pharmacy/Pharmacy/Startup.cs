@@ -25,6 +25,7 @@ namespace Pharmacy
 {
     public class Startup
     {
+        public const string corsPolicyName = "MyPolicy";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -34,6 +35,15 @@ namespace Pharmacy
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy(corsPolicyName, builder =>
+            {
+                builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+            }));
+
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
@@ -85,7 +95,7 @@ namespace Pharmacy
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            app.UseCors(corsPolicyName);
             app.UseStaticFiles();
             app.UseCookiePolicy();
 

@@ -315,11 +315,7 @@ namespace Pharmacy.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(64);
 
-                    b.Property<int?>("PatientId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PatientId");
 
                     b.ToTable("Insurances");
                 });
@@ -628,13 +624,6 @@ namespace Pharmacy.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Pharmacy.Data.Entities.Insurance", b =>
-                {
-                    b.HasOne("Pharmacy.Data.Entities.Patient")
-                        .WithMany("Insurances")
-                        .HasForeignKey("PatientId");
-                });
-
             modelBuilder.Entity("Pharmacy.Data.Entities.InsuranceSupport", b =>
                 {
                     b.HasOne("Pharmacy.Data.Entities.Insurance", "Insurance")
@@ -708,7 +697,7 @@ namespace Pharmacy.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Pharmacy.Data.Entities.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("Insurances")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

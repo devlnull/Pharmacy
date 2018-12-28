@@ -80,6 +80,19 @@ namespace Pharmacy.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Insurances",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(maxLength: 64, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Insurances", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MedicineCategories",
                 columns: table => new
                 {
@@ -330,23 +343,29 @@ namespace Pharmacy.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Insurances",
+                name: "PatientInsurances",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(maxLength: 64, nullable: false),
-                    PatientId = table.Column<int>(nullable: true)
+                    PatientId = table.Column<int>(nullable: false),
+                    InsuranceId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Insurances", x => x.Id);
+                    table.PrimaryKey("PK_PatientInsurances", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Insurances_Patients_PatientId",
+                        name: "FK_PatientInsurances_Insurances_InsuranceId",
+                        column: x => x.InsuranceId,
+                        principalTable: "Insurances",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PatientInsurances_Patients_PatientId",
                         column: x => x.PatientId,
                         principalTable: "Patients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -379,36 +398,6 @@ namespace Pharmacy.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Quantity = table.Column<int>(nullable: false),
-                    MedicineId = table.Column<int>(nullable: false),
-                    CompanyId = table.Column<int>(nullable: false),
-                    Price = table.Column<double>(nullable: false),
-                    CreateDate = table.Column<DateTime>(nullable: false),
-                    ExpireDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Products_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Products_Medicines_MedicineId",
-                        column: x => x.MedicineId,
-                        principalTable: "Medicines",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "InsuranceSupports",
                 columns: table => new
                 {
@@ -435,27 +424,31 @@ namespace Pharmacy.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PatientInsurances",
+                name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    PatientId = table.Column<int>(nullable: false),
-                    InsuranceId = table.Column<int>(nullable: false)
+                    Quantity = table.Column<int>(nullable: false),
+                    MedicineId = table.Column<int>(nullable: false),
+                    CompanyId = table.Column<int>(nullable: false),
+                    Price = table.Column<double>(nullable: false),
+                    CreateDate = table.Column<DateTime>(nullable: false),
+                    ExpireDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PatientInsurances", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PatientInsurances_Insurances_InsuranceId",
-                        column: x => x.InsuranceId,
-                        principalTable: "Insurances",
+                        name: "FK_Products_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PatientInsurances_Patients_PatientId",
-                        column: x => x.PatientId,
-                        principalTable: "Patients",
+                        name: "FK_Products_Medicines_MedicineId",
+                        column: x => x.MedicineId,
+                        principalTable: "Medicines",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -521,7 +514,8 @@ namespace Pharmacy.Data.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     OrderId = table.Column<int>(nullable: false),
                     ScriptDetailId = table.Column<int>(nullable: false),
-                    ProductId = table.Column<int>(nullable: false)
+                    ProductId = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -611,11 +605,6 @@ namespace Pharmacy.Data.Migrations
                 table: "Employees",
                 column: "UserId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Insurances_PatientId",
-                table: "Insurances",
-                column: "PatientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InsuranceSupports_InsuranceId",

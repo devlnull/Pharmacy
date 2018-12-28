@@ -20,7 +20,7 @@
         <form method="post" id="submitForm">
             <h4>Response to @Model.PatientName</h4>
             <hr />
-            <input asp-for="Medicines" type="hidden"/>
+            <input asp-for="Medicines" type="hidden" />
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="row form-group">
                 <div class="col-md-4">
@@ -70,27 +70,6 @@
             }
         }
 
-        function addMed(medId) {
-            var scriptList = $("#scriptList");
-            var url = "@(Url.Action("DoctorList", "Doctor", null , Context.Request.Scheme))" + "?doctor="
-            var urlMedInfo = "http://localhost:6655/Medicine/FindMedicine/" + medId;
-            var item = $.getJSON(urlMedInfo, function (json) {
-                var res = item.responseJSON;
-                if (res != null || res != undefined) {
-                    scriptList.append("<div class='row' style='margin:10px 0px;padding:5px; border-radius:4px;background-color:#bce8f1;' id='med"
-                        + medId + "'>" +
-                        "<span style='font-size:large'>" + res.name + " - " + res.dosage + "</span>" +
-                        "<a id='delMed" + medId + "' class='btn btn-danger pull-right' data-id='" + medId + "'> Delete </a>" +
-                        "</div>");
-                }
-                var delItem = $('#delMed' + medId);
-                delItem.on('click', function () {
-                    delMed(delItem[0]);
-                });
-            });
-
-        }
-
         var url = "@(Url.Action("MedicinesList", "Product", null , Context.Request.Scheme))" + "?medicine="
         $("#medicineSelector").autocomplete({
             source: function (request, response) {
@@ -112,8 +91,18 @@
                 var medicines = $("#Medicines");
                 var medicineSelector = $("#medicineSelector");
                 var medVal = ui.item.value;
+                var medName = ui.item.label;
                 medicineList.push(medVal);
-                addMed(medVal);
+                var scriptList = $("#scriptList");
+                scriptList.append("<div class='row' style='margin:10px 0px;padding:5px; border-radius:4px;background-color:#bce8f1;' id='med"
+                    + medVal + "'>" +
+                    "<span style='font-size:large'>" + medName + "</span>" +
+                    "<a id='delMed" + medVal + "' class='btn btn-danger pull-right' data-id='" + medVal + "'> Delete </a>" +
+                    "</div>");
+                var delItem = $('#delMed' + medVal);
+                delItem.on('click', function () {
+                    delMed(delItem[0]);
+                });
                 window.setTimeout(function () {
                     medicineSelector.val("");
                 }, 10);

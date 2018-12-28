@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace Pharmacy.Controllers
 {
     [Ability]
     [Authorize(Roles = PharmacyRoles.Employee)]
+    [EnableCors(Startup.corsPolicyName)]
     public class MedicineController : Controller
     {
         private readonly AppDbContext _context;
@@ -29,7 +31,7 @@ namespace Pharmacy.Controllers
 
         public async Task<ActionResult> Index(SearchModel model)
         {
-            var medicines =  _context.Medicines.Include(x => x.InsuranceSupports)
+            var medicines = _context.Medicines.Include(x => x.InsuranceSupports)
                 .Include(x => x.Products)
                 .Where(x => true);
             if (model.OnlyExistence)
